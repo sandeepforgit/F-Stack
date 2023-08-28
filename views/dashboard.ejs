@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+</head>
+<body>
+    <h1>Dashboard</h1>
+    <form action="/search-books" method="get">
+        <input type="text" name="q" placeholder="Search for books" value="<%= searchTerm || '' %>">
+        <button type="submit">Search</button>
+    </form>
+
+    
+    <% if (showResults) { %>
+        <h2>Google Books API Search Results for "<%= searchTerm %>":</h2>
+        <ul>
+        <% if (searchResults && searchResults.length > 0) { %>
+            <% searchResults.forEach(result => { %>
+                <li>
+                    <h3><%= result.title %></h3>
+                    <p>Author: <%= result.author %></p>
+                    <p>Published Year: <%= result.publishedYear %></p>
+                    <% if (result.coverUrl) { %>
+                        <img src="<%= result.coverUrl %>" alt="Book Cover">
+                    <% } else { %>
+                        <p>No cover available</p>
+                    <% } %>
+                </li>
+            <% }); %>
+        <% } else { %>
+            <li>No results from the Google Books API.</li>
+        <% } %>
+    </ul>
+    <% } else { %>
+        <p>Enter a search query to see results.</p>
+    <% } %>
+</body>
+</html>

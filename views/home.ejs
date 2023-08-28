@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: url('<%= backgroundImagePath %>') no-repeat center center fixed;
+            background-size: cover;
+            background-color: #272727; /* Fallback color if image fails to load */
+        }
+        .container {
+            text-align: center;
+            background-color: rgba(0, 0, 0, 0.7);
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        h1 {
+            margin-bottom: 10px;
+            color: #ffffff;
+        }
+        p {
+            margin-bottom: 20px;
+            color: #dddddd;
+        }
+        a.button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #ffffff;
+            text-decoration: none;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+        a.button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Welcome to the Bookstore!</h1>
+        <p>Explore our collection of books.</p>
+        <a href="/signup" class="button">Signup</a>
+        <a href="/login" class="button">Login</a>
+    </div>
+</body>
+</html>
