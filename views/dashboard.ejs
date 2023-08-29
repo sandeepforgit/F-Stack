@@ -2,17 +2,87 @@
 <html>
 <head>
     <title>Dashboard</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #181818;
+            color: #ffffff;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        h1 {
+            margin-bottom: 20px;
+            color: #f0f0f0;
+        }
+        form {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        input[type="text"] {
+            flex-grow: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            background-color: #2c2c2c;
+            color: #ffffff;
+        }
+        button[type="submit"] {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            background-color: #1e446d;
+            color: #ffffff;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        button[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        li {
+            border: 1px solid #333;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            padding: 10px;
+            background-color: #2c2c2c;
+        }
+        h2 {
+            margin-bottom: 10px;
+        }
+        h3 {
+            margin: 0;
+        }
+        p {
+            margin: 5px 0;
+        }
+        img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid #444;
+            border-radius: 5px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Dashboard</h1>
-    <form action="/search-books" method="get">
-        <input type="text" name="q" placeholder="Search for books" value="<%= searchTerm || '' %>">
-        <button type="submit">Search</button>
-    </form>
+    <div class="container">
+        <h1>Search and Browse some Books</h1>
+        <form action="/search-books" method="get">
+            <input type="text" name="q" placeholder="Search for books" value="<%= searchTerm || '' %>">
+            <button type="submit">Search</button>
+        </form>
 
-    
+
     <% if (showResults) { %>
-        <h2>Google Books API Search Results for "<%= searchTerm %>":</h2>
+        <h2>Search Results for "<%= searchTerm %>":</h2>
         <ul>
         <% if (searchResults && searchResults.length > 0) { %>
             <% searchResults.forEach(result => { %>
