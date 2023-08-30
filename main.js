@@ -71,7 +71,7 @@ app.get("/loginsubmit", function (req, res) {
  app.get("/search-books", function (req, res) {
     const searchTerm = req.query.q;
     if (searchTerm) {
-    const apiKey = "AIzaSyCY6VJ6O5Vfp0VEBvhxCBSWw1SX31nJPOU";
+    const apiKey = "API KEY";
     const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${apiKey}`;
     
     axios.get(apiUrl)
