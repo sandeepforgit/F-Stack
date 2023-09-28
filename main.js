@@ -3,10 +3,14 @@ var app = express();
 
 const path = require('path');
 
+const bodyParser = require('body-parser');
 
+const bcrypt = require('bcrypt');
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 
 const axios = require('axios');
@@ -29,49 +33,113 @@ app.get("/", function (req, res) {
 
 
 app.get("/signup", function (req, res) {
-    res.render("signup");
+    const errors = [];
+    res.render("signup",  {errors});
 });
 
-app.get("/signupsubmit", function (req, res) {
-    console.log(req.query);
-    db.collection("users").add({
-        username: req.query.username,
-        email: req.query.email,
-        password: req.query.password,
-        confirm_password: req.query.confirm_password
+app.post("/signupsubmit", function (req, res) {
+    const username = req.body.username;
+    const email = req.body.email;
+    const password = req.body.password;
+    const confirmPassword = req.body.confirm_password;
+    const errors = [];
 
-    })
-    res.redirect("/dashboard");
+    if (password.length < 8) {
+        errors.push("Password must be at least 8 characters long.");
+    }
+
+    if (password !== confirmPassword) {
+        errors.push("Password and confirm password do not match.");
+    }
+
+    db.collection("users")
+        .where("username", "==", username)
+        .get()
+        .then(async function (docs) { 
+            if (docs.size > 0) {
+                errors.push("User already exists. Please choose a different username.");
+            }
+
+            if (errors.length > 0) {
+                res.render("signup", { errors });
+            } else {
+                try {
+                    const hashedPassword = await bcrypt.hash(password, 10);
+                    db.collection("users").add({
+                        username: username,
+                        email: email,
+                        password: hashedPassword,
+                    })
+                    .then(function () {
+                        res.redirect("/dashboard");
+                    })
+                    .catch(function (error) {
+                        res.status(500).send(`Error creating user: ${error.message}`);
+                    });
+                } catch (error) {
+                    res.status(500).send(`Error hashing password: ${error.message}`);
+                }
+            }
+        })
+        .catch(function (error) {
+            res.status(500).send(`Error checking for existing user: ${error.message}`);
+        });
 });
+
 
 
 
 
 
 app.get("/login", function (req, res) {
-    res.render("login");
+    const errors = [];
+    res.render("login", {errors});
 });
 
-app.get("/loginsubmit", function (req, res) {
-    db.collection("users")
-        .where("username", "==", req.query.username)
-        .where("password", "==", req.query.password)
-        .get()
-        .then(function (docs) {
-            if (docs.size > 0) {
-                res.redirect("/dashboard");
-            }
-            else {
-                res.send("please check your password and username once or create an account");
-            }
-        })
-})
+app.post("/loginsubmit", async function (req, res) {
+    const username = req.body.username;
+    const password = req.body.password;
+    const errors = [];
+
+    // Validation checks
+    if (!username || !password) {
+        errors.push("Username and password are required.");
+    }
+
+    // Check if the user exists in Firebase
+    const userQuery = await db.collection("users")
+        .where("username", "==", username)
+        .get();
+
+    if (userQuery.size === 0) {
+        errors.push("User not found. Please create an account.");
+    } else {
+        const userData = userQuery.docs[0].data();
+        const hashedPassword = userData.password;
+
+        // Compare the hashed password with the provided password
+        const isPasswordValid = await bcrypt.compare(password, hashedPassword);
+
+        if (!isPasswordValid) {
+            errors.push("Incorrect password. Please try again.");
+        }
+    }
+
+    // If there are errors, render the login page with the errors
+    if (errors.length > 0) {
+        res.render("login", { errors });
+    } else {
+        // Authentication successful, redirect to the dashboard
+        res.redirect("/dashboard");
+    }
+});
+
 
 
  app.get("/search-books", function (req, res) {
     const searchTerm = req.query.q;
     if (searchTerm) {
-    const apiKey = "API KEY";
+    const apiKey = "AIzaSyCY6VJ6O5Vfp0VEBvhxCBSWw1SX31nJPOU";
     const apiUrl = `https://www.googleapis.com/books/v1/volumes?q=${searchTerm}&key=${apiKey}`;
     
     axios.get(apiUrl)

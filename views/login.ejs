@@ -61,14 +61,24 @@
 <body>
     <div class="container">
         <h2>Login</h2>
-        <form method="get" action="/loginsubmit">
+        <form method="POST" action="/loginsubmit">
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
+                <span class="error-message" id="username-error" style="color: red;">
+                    <% if (errors.includes("User not found. Please create an account.")) { %>
+                        User not found. Please create an account.
+                    <% } %>
+                </span>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
+                <span class="error-message" id="username-error" style="color: red;">
+                    <% if (errors.includes("Incorrect password. Please try again.")) { %>
+                        Incorrect password. Please try again.
+                    <% } %>
+                </span>
             </div>
             <div class="form-group">
                 <button type="submit" style="color: rgb(253, 249, 255);">Login</button>
