@@ -69,15 +69,16 @@
             <div class="form-group">
                 <label for="username">Username</label>
                 <input type="text" id="username" name="username" required>
-                <span class="error-message" id="username-error" style="color: red;">
-                    <% if (errors.includes("User already exists. Please choose a different username.")) { %>
-                        User already exists. Please choose a different username.
-                    <% } %>
-                </span>
+                
             </div>
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
+                <span class="error-message" id="username-error" style="color: red;">
+                    <% if (errors.includes("Email already exists")) { %>
+                        Email already exists.
+                    <% } %>
+                </span>
             </div>
             <div class="form-group">
                 <label for="password">Password</label>

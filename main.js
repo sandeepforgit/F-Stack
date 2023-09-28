@@ -52,11 +52,11 @@ app.post("/signupsubmit", function (req, res) {
     }
 
     db.collection("users")
-        .where("username", "==", username)
+        .where("email", "==", email)
         .get()
         .then(async function (docs) { 
             if (docs.size > 0) {
-                errors.push("User already exists. Please choose a different username.");
+                errors.push("Email already exists");
             }
 
             if (errors.length > 0) {
