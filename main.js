@@ -27,7 +27,6 @@ const db = getFirestore();
 
 
 app.get("/", function (req, res) {
-    
     res.render("home");
 });
 
