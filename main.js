@@ -27,8 +27,8 @@ const db = getFirestore();
 
 
 app.get("/", function (req, res) {
-    const backgroundImagePath = "C:\Users\sande\Desktop\Full stack\lib.jpeg";
-    res.render("home", { backgroundImagePath});
+    
+    res.render("home");
 });
 
 
@@ -101,12 +101,10 @@ app.post("/loginsubmit", async function (req, res) {
     const password = req.body.password;
     const errors = [];
 
-    // Validation checks
     if (!username || !password) {
         errors.push("Username and password are required.");
     }
 
-    // Check if the user exists in Firebase
     const userQuery = await db.collection("users")
         .where("username", "==", username)
         .get();
@@ -117,7 +115,6 @@ app.post("/loginsubmit", async function (req, res) {
         const userData = userQuery.docs[0].data();
         const hashedPassword = userData.password;
 
-        // Compare the hashed password with the provided password
         const isPasswordValid = await bcrypt.compare(password, hashedPassword);
 
         if (!isPasswordValid) {
@@ -125,11 +122,9 @@ app.post("/loginsubmit", async function (req, res) {
         }
     }
 
-    // If there are errors, render the login page with the errors
     if (errors.length > 0) {
         res.render("login", { errors });
     } else {
-        // Authentication successful, redirect to the dashboard
         res.redirect("/dashboard");
     }
 });
